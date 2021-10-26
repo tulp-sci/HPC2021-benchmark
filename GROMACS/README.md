@@ -2,15 +2,15 @@
 Benchmark version : 2020.3 or 2020.4
 Official document : http://manual.gromacs.org/documentation/
 
-# Benchmark rules
+## Benchmark rules
 GROMACS version 2020.3 or 2020.4
 No code modification is allowed
-Installation
+## Installation
 Official installation guide : http://manual.gromacs.org/documentation/current/install-guide/index.html
 Source code : http://manual.gromacs.org/documentation/
 
-## Example
-### Download and Install GROMACS
+### Example
+#### Download and Install GROMACS
 wget ftp://ftp.gromacs.org/pub/gromacs/gromacs-2020.3.tar.gz
 tar xfz gromacs-2020.3.tar.gz
 cd gromacs-2020.3/
@@ -43,10 +43,10 @@ If using external libraries, all external libraries must be available to and usa
 
 It is important to ensure that the GROMACS version is checked and the verified release checksum is present.
 
-# Input files
+## Input files
 We use the test case-B (lignocellulose-rf) from UEABS benhmark. The input files can be downloaded here.
 
-# Running GROMACS
+## Running GROMACS
 The test case is expected to perform on 4 compute nodes (dual-socket CPU-only node).
 
 To execute GROMACS mdrun on 4 compute nodes with Slurm, following command can be used.
@@ -56,7 +56,7 @@ or
 
 [mpirun execution] [path to GROMACS gmx_mpi] mdrun -s [input (.tpr)] [mdrun options]
 
-# mdrun options
+### mdrun options
 Official document : http://manual.gromacs.org/documentation/current/onlinehelp/gmx-mdrun.html
 
 options	description
@@ -75,5 +75,5 @@ You may consider to use the following options:
 -nstlist to specify frequency to update the neighbor list
 For advanced options and performance tuning, please see official GROMACS manual.The adjustment of running options is allowed unless there is no loss of the scientific accuracy (i.e. no effect on scientific result).
 
-# Performance
+## Performance
 GROMACS mdrun reports its performance in nanoseconds per day (ns/day). This is printed out on the screen at the end of the simulation or listed at the end of log file.
