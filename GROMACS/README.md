@@ -9,8 +9,8 @@ Installation
 Official installation guide : http://manual.gromacs.org/documentation/current/install-guide/index.html
 Source code : http://manual.gromacs.org/documentation/
 
-# Example
-# Download and Install GROMACS
+## Example
+### Download and Install GROMACS
 wget ftp://ftp.gromacs.org/pub/gromacs/gromacs-2020.3.tar.gz
 tar xfz gromacs-2020.3.tar.gz
 cd gromacs-2020.3/
