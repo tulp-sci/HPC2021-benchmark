@@ -1,7 +1,5 @@
 # HPC-AI 2021 Benchmark Suite
-vm;krna;kjbnt'kgn'
-kfn;vika[no'imbjknt;'ofmn
-kfmvknrjnjznkfkndfjhnknbtjkgnofnkn]jvn;jerfnjncfbjhbfbjcidffmkffff
+
 ## Computing System on HPC-AI 2021
 
 ## Benchmark Structure
