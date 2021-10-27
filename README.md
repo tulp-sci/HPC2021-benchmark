@@ -6,6 +6,8 @@
 
 ### Compute Node Benchmark
 
+### DGX Node Benchmark
+
 ### GPU Node Benchmark
 
 ## Contacts
