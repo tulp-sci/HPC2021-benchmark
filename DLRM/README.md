@@ -1,4 +1,9 @@
 # DLRM Benchmark
+Benchmark version :
+
+Official document :
+
+
 ## Benchmark rules
 ## Installation
 ### Example 
