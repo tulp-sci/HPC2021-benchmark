@@ -1,0 +1,59 @@
+Bootstrap: library
+From: apisith.won/default/centos8.3-py38-cuda11.1
+
+%environment
+    export PATH=/usr/local/cuda/bin:/opt/cmake/bin:/usr/local/ompi/bin:/opt/ucx/bin:/opt/ucc/bin:${PATH}
+    export LD_LIBRARY_PATH=/usr/local/cuda/lib64:/opt/ucx/lib:/opt/ucc/lib:${LD_LIBRARY_PATH}
+
+%post
+    mkdir -p /tmp/dlrm
+
+    # Set ENV
+    OPENUCX_LINK=https://github.com/openucx/ucx.git
+    UCC_LINK=https://github.com/openucx/ucc.git
+    OMPI_LINK=https://github.com/open-mpi/ompi.git
+
+    UCC_COMMIT=1a2da2a3baf47b16534d4bc31defaa0d522a246d
+
+    export PATH=/usr/local/cuda/bin:${PATH}
+    export LD_LIBRARY_PATH=/usr/local/cuda/lib64:${LD_LIBRARY_PATH}
+
+
+    #======================= Install OpenUCX ===========================
+    
+    ## Install OpenUCX - UCX
+    git clone --branch v1.11.1 ${OPENUCX_LINK} /tmp/dlrm/ucx && \
+    cd /tmp/dlrm/ucx && \
+    ./autogen.sh && \
+    ./contrib/configure-release-mt --prefix=/opt/ucx --without-java --with-cuda=/usr/local/cuda && \
+    make -j install
+
+    ## Install OpenUCX - UCC
+    git clone --branch v0.1.0 ${UCC_LINK} /tmp/dlrm/ucc && \
+    cd /tmp/dlrm/ucc && \
+    git checkout ${UCC_COMMIT} && \
+    ./autogen.sh && \
+    ./configure --prefix=/opt/ucc --with-ucx=/opt/ucx --with-cuda=/usr/local/cuda && \
+    make -j install
+
+    #====================== Install Cmake ==========================
+    cd /tmp/dlrm && \
+    wget https://github.com/Kitware/CMake/releases/download/v3.20.4/cmake-3.20.4-linux-x86_64.sh && \
+    chmod +x /tmp/dlrm/cmake-3.20.4-linux-x86_64.sh && \
+    mkdir /opt/cmake && \
+    /tmp/dlrm/cmake-3.20.4-linux-x86_64.sh --skip-license --prefix=/opt/cmake
+
+
+
+    #==================== Install Open MPI ======================
+    git clone --branch v4.1.1 ${OMPI_LINK} /tmp/dlrm/ompi && \
+    cd /tmp/dlrm/ompi && \
+    ./autogen.pl; \
+    ./configure --prefix=/usr/local/ompi \
+    --with-ucx=/opt/ucx \
+    --with-ucx-libdir=/opt/ucx/lib \
+    --with-cuda=/usr/local/cuda; \
+    make -j install
+
+    # Remove tmp
+    rm -rf /tmp/dlrm

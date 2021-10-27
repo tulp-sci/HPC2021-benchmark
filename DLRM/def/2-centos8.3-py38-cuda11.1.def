@@ -1,0 +1,22 @@
+Bootstrap: library
+From: apisith.won/default/centos8.3-py38:latest
+
+%environment
+    export PATH=/usr/local/cuda/bin:${PATH}
+    export LD_LIBRARY_PATH=/usr/local/cuda/lib64:${LD_LIBRARY_PATH}
+
+%post
+    mkdir -p /tmp/dlrm
+    yum groupinstall -y 'Infiniband Support'
+    yum config-manager --set-enabled powertools
+    yum install -y numactl numactl-devel wget \
+    protobuf-compiler protobuf-devel rdma-core-devel
+
+    #====================== Install CUDA - v11.1  ==========================
+    # Link : https://developer.nvidia.com/blog/streamlining-nvidia-driver-deployment-on-rhel-8-with-modularity-streams/
+    dnf config-manager --add-repo=https://developer.download.nvidia.com/compute/cuda/repos/rhel8/x86_64/cuda-rhel8.repo && \
+    dnf -y module install nvidia-driver:latest && \
+    dnf -y install cuda-11-1
+
+    # Remove tmp
+    rm -rf /tmp/dlrm

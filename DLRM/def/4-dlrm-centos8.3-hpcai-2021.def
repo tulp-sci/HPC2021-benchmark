@@ -1,0 +1,56 @@
+Bootstrap: library
+From: apisith.won/default/dlrm-centos8.3-dep:latest
+
+
+%post
+    mkdir -p /tmp/dlrm/code
+    export PATH=/usr/local/cuda/bin:/opt/cmake/bin:/usr/local/ompi/bin:/opt/ucx/bin:/opt/ucc/bin:${PATH}
+    export LD_LIBRARY_PATH=/usr/local/cuda/lib64:/opt/ucx/lib:/opt/ucc/lib:${LD_LIBRARY_PATH}
+
+    # Set ENV
+    DLRM_LINK=https://github.com/facebookresearch/dlrm.git
+    TORCH_UCC_LINK=https://github.com/facebookresearch/torch_ucc.git
+
+    # ME
+    TORCH_UCC_COMMIT=18fc9a1ca2f6ec4d5924922b89c09e68a86d904b
+
+    # Benchmark Guidelines
+    PYTORCH_COMMIT=1a64a5c0ba895f57fa810d80a6a8b9f11f24b848
+    # TORCH_UCC_COMMIT=966bd2b643dc9d2119edcfe45e7afbe47cdbe478
+    TORCH_DLRM_COMMIT=f486cea79e1f209d3e2cfde5c1261468e0993c67
+
+    # Configure Python
+    pip install --prefix=/usr/local --upgrade  setuptools wheel
+
+    #======================= Install PyTorch ===========================
+    pip install --prefix=/usr/local  --default-timeout=900 numpy
+    pip install --prefix=/usr/local  --no-cache-dir --default-timeout=900 --pre torch -f https://download.pytorch.org/whl/nightly/cu111/torch_nightly.html
+    pip install --prefix=/usr/local  "git+https://github.com/mlperf/logging.git@0.7.1"
+
+
+    #======================= Install DLRM ===========================
+    git clone ${DLRM_LINK} /tmp/dlrm/code
+
+    cd /tmp/dlrm/code && \
+    git checkout ${TORCH_DLRM_COMMIT} && \
+    pip install --prefix=/usr/local  --no-cache-dir -r /tmp/dlrm/code/requirements.txt
+    pip install --prefix=/usr/local  tensorboard
+
+    #==================== Install Torch-UCC =========================
+    git clone ${TORCH_UCC_LINK} /torch_ucc
+
+    cd /torch_ucc && \
+    git checkout ${TORCH_UCC_COMMIT}
+
+    cd /torch_ucc && \
+    UCX_HOME=/opt/ucx \
+    UCC_HOME=/opt/ucc \
+    WITH_CUDA=/usr/local/cuda \
+    python setup.py install --prefix=/usr/local
+
+    # test library
+    # python -c 'import torch, torch_ucc'
+
+    # Remove tmp
+    rm -rf /tmp/dlrm
+
