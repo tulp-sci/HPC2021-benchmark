@@ -1,14 +1,14 @@
 # GROMACS Benchmark
 Benchmark version : 2020.3 or 2020.4
-Official document : http://manual.gromacs.org/documentation/
+Official document : 
 
 ## Benchmark rules
 * GROMACS version 2020.3 or 2020.4
 * No code modification is allowed
 ## Installation
-Official installation guide : http://manual.gromacs.org/documentation/current/install-guide/index.html
+Official installation guide :
 
-Source code : http://manual.gromacs.org/documentation/
+Source code :
 
 ### Example
 #### Download and Install GROMACS
