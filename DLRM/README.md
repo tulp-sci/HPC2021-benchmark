@@ -15,5 +15,5 @@ The dataset used for this benchmark is [Criteo Terabyte dataset.](https://labs.c
 
 
 ## Running DLRM
-### mdrun option
+
 ## Performance
