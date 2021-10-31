@@ -1,0 +1,39 @@
+#!/bin/bash
+#PBS -q dgx-dev
+#PBS -j oe
+#PBS -l walltime=2:00:00
+#PBS -P 50000043
+#PBS -N ucc
+
+
+export SRC_DIR=/home/projects/50000043/apacsc29/.src.dgx
+export INSTALL_DIR=/home/projects/50000043/apacsc29/.local.dgx
+
+# GCC
+export PATH=$INSTALL_DIR/gcc-7.3/bin:$PATH
+export LD_LIBRARY_PATH=$INSTALL_DIR/gcc-7.3/lib:$INSTALL_DIR/gcc-7.3/lib64:$LD_LIBRARY_PATH
+
+# OpenSSL
+export PATH=$INSTALL_DIR/openssl/bin:$PATH
+export LD_LIBRARY_PATH=$INSTALL_DIR/openssl/lib:$LD_LIBRARY_PATH
+
+# UCX
+export PATH=$INSTALL_DIR/ucx/bin:$PATH
+export LD_LIBRARY_PATH=$INSTALL_DIR/ucx/lib:$LD_LIBRARY_PATH
+
+## Build UCC
+UCC_GITHUB_URL=https://github.com/openucx/ucc.git
+UCC_BRANCH=master
+export UCC_INSTALL_DIR=${INSTALL_DIR}/ucc
+
+echo "INFO: Build UCC"
+UCC_SRC_DIR="${SRC_DIR}/ucc"
+cd "${UCC_SRC_DIR}"
+"${UCC_SRC_DIR}/autogen.sh"
+mkdir -p "${UCC_SRC_DIR}/build"
+cd "${UCC_SRC_DIR}/build"
+"${UCC_SRC_DIR}/configure" --prefix=$INSTALL_DIR/ucc --with-ucx=$INSTALL_DIR/ucx \
+    --with-cuda=/home/app/cuda10.1
+
+make -j $(nproc)
+make install

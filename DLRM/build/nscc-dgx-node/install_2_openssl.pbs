@@ -1,0 +1,21 @@
+#!/bin/bash
+#PBS -q dgx-dev
+#PBS -j oe
+#PBS -l walltime=00:30:00
+#PBS -P 50000043
+#PBS -N openssl
+
+
+export SRC_DIR=/home/projects/50000043/apacsc29/.src.dgx
+export INSTALL_DIR=/home/projects/50000043/apacsc29/.local.dgx
+
+# GCC
+export PATH=$INSTALL_DIR/gcc-7.3/bin:$PATH
+export LD_LIBRARY_PATH=$INSTALL_DIR/gcc-7.3/lib:$INSTALL_DIR/gcc-7.3/lib64:$LD_LIBRARY_PATH
+
+cd $SRC_DIR/openssl-1.1.1l
+
+./config --prefix=$INSTALL_DIR/openssl --openssldir=$INSTALL_DIR/openssl no-ssl2 CC=$INSTALL_DIR/gcc-7.3/bin/gcc
+
+make -j $(nproc)
+make install

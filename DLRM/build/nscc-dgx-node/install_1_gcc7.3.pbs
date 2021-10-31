@@ -1,0 +1,21 @@
+#!/bin/bash
+#PBS -q dgx-dev
+#PBS -j oe
+#PBS -l walltime=1:00:00
+#PBS -P 50000043
+#PBS -N gcc
+
+
+export SRC_DIR=/home/projects/50000043/apacsc29/.src.dgx
+export INSTALL_DIR=/home/projects/50000043/apacsc29/.local.dgx
+
+cd $SRC_DIR/gcc-7.3.0
+mkdir -p $INSTALL_DIR
+
+./contrib/download_prerequisites
+./configure -v --build=x86_64-linux-gnu --host=x86_64-linux-gnu \
+--target=x86_64-linux-gnu --prefix=$INSTALL_DIR/gcc-7.3 \
+--disable-multilib --enable-checking=release --enable-languages=c,c++,fortran
+
+make -j $(nproc)
+make install
